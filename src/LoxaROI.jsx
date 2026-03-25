@@ -34,7 +34,7 @@ function PopoverFigure({ value, color, fontSize = "var(--text-lg)" }) {
   const [show, setShow] = useState(false);
   return (
     <span
-      style={{ position: "relative", minWidth: 90, textAlign: "right", display: "inline-block", marginLeft: 12 }}
+      style={{ position: "relative", width: 100, flexShrink: 0, textAlign: "right", display: "inline-block", marginLeft: 12 }}
       onClick={() => setShow((s) => !s)}
       onMouseLeave={() => setShow(false)}
     >
@@ -96,10 +96,10 @@ function Tag({ label, value }) {
     <span style={{
       display: "inline-flex", alignItems: "center", gap: 4,
       background: "rgba(255,255,255,0.07)", borderRadius: 6, padding: "3px 10px",
-      fontSize: "var(--text-xs)", whiteSpace: "nowrap",
+      fontSize: "var(--text-sm)", whiteSpace: "nowrap",
     }}>
-      <span style={{ color: "rgba(255,255,255,0.45)" }}>{label}</span>
-      <span style={{ fontWeight: 700, color: "rgba(255,255,255,0.75)" }}>{value}</span>
+      <span style={{ color: "rgba(255,255,255,0.55)" }}>{label}</span>
+      <span style={{ fontWeight: 700, color: "rgba(255,255,255,0.85)" }}>{value}</span>
     </span>
   );
 }
@@ -113,11 +113,11 @@ function LineItem({ title, revenue, profit, color, tags, isLast }) {
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: tags ? 10 : 0 }}>
         <div style={{ width: 10, height: 10, borderRadius: 3, background: color, flexShrink: 0 }} />
         <div style={{ fontSize: "var(--text-base)", fontWeight: 600, color: "rgba(255,255,255,0.85)", flex: 1 }}>{title}</div>
-        <PopoverFigure value={revenue} color="var(--blue)" />
-        <PopoverFigure value={profit} color="var(--peach)" />
+        <PopoverFigure value={revenue} color={color} />
+        <PopoverFigure value={profit} color={color} />
       </div>
       {tags && (
-        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginLeft: 20 }}>
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginLeft: 20, maxWidth: "60%" }}>
           {tags}
         </div>
       )}
@@ -188,29 +188,47 @@ export default function LoxaROI() {
         }
         @media (max-width: 860px) {
           .roi-grid { grid-template-columns: 1fr !important; }
-          .slider-panel { position: static !important; order: -1; }
+          .slider-panel { position: static !important; order: 1; }
+          .stream-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+        @media (max-width: 500px) {
+          .stream-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
 
       {/* Header */}
       <div style={{ padding: "16px 4vw" }}>
         <div style={{
-          background: "#000", borderRadius: 999, padding: "12px 12px 12px 12px",
-          display: "flex", alignItems: "center",
+          background: "#000", borderRadius: 999, padding: "12px 20px 12px 12px",
+          display: "flex", alignItems: "center", justifyContent: "space-between",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
             <img src="/loxa-logo-landscape.svg" alt="Loxa" style={{ height: 56, borderRadius: 999 }} />
-            <div style={{ fontSize: "var(--text-lg)", fontWeight: 600, color: "#fff", fontFamily: "var(--font-heading)" }}>Partnership ROI Calculator</div>
           </div>
+          <a
+            href="https://www.loxacover.com/contact"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-block", background: "var(--purple)", color: "#000",
+              borderRadius: 12, padding: "10px 28px",
+              fontSize: "var(--text-base)", fontWeight: 700, fontFamily: "var(--font-heading)",
+              textDecoration: "none", whiteSpace: "nowrap",
+            }}
+          >
+            Make an enquiry
+          </a>
         </div>
       </div>
 
-      <div style={{ maxWidth: 1400, margin: "0 auto", padding: "24px 4vw 56px" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "24px 4vw 56px" }}>
 
-        {/* Company name */}
+        {/* Page title */}
         <div style={{ textAlign: "center", marginBottom: 40 }}>
-          <div style={{ fontSize: "var(--text-sm)", fontWeight: 600, color: "#666", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 8 }}>Prepared for</div>
-          <div style={{ fontSize: "var(--text-3xl)", fontWeight: 700, color: "#000", fontFamily: "var(--font-heading)", lineHeight: 1.1 }}>{company}</div>
+          <div style={{ fontSize: "var(--text-3xl)", fontWeight: 700, color: "#000", fontFamily: "var(--font-heading)", lineHeight: 1.1, marginBottom: 12 }}>Partnership ROI Calculator</div>
+          <div style={{ fontSize: "var(--text-lg)", color: "#666" }}>
+            Prepared for <span style={{ fontWeight: 700, color: "#000", fontFamily: "var(--font-heading)" }}>{company}</span>
+          </div>
         </div>
 
         {/* Two column layout */}
@@ -219,21 +237,21 @@ export default function LoxaROI() {
           {/* LEFT: Results */}
           <div style={{ background: "#000", borderRadius: 32, padding: "32px 32px 16px" }}>
 
-              {/* Column headers */}
-              <div style={{ display: "flex", alignItems: "center", paddingBottom: 8 }}>
-                <div style={{ flex: 1 }} />
-                <div style={{ fontSize: "var(--text-sm)", color: "var(--blue)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", minWidth: 90, textAlign: "right", marginLeft: 12 }}>Revenue</div>
-                <div style={{ fontSize: "var(--text-sm)", color: "var(--peach)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", minWidth: 90, textAlign: "right", marginLeft: 12 }}>Profit</div>
+              {/* Column headers + Total label */}
+              <div style={{ display: "flex", alignItems: "flex-start", paddingBottom: 8 }}>
+                <div style={{ fontSize: "var(--text-xl)", fontWeight: 700, color: "var(--purple)", textTransform: "uppercase", letterSpacing: "0.04em", flex: 1, fontFamily: "var(--font-heading)" }}>Total Annual<br/>Value</div>
+                <div style={{ fontSize: "var(--text-sm)", color: "var(--blue)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", width: 100, flexShrink: 0, textAlign: "right", marginLeft: 12 }}>Revenue</div>
+                <div style={{ fontSize: "var(--text-sm)", color: "var(--peach)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", width: 100, flexShrink: 0, textAlign: "right", marginLeft: 12 }}>Profit</div>
               </div>
 
-              {/* Totals */}
+              {/* Total figures */}
               <div style={{
                 display: "flex", alignItems: "baseline",
                 paddingBottom: 18, borderBottom: "1px solid rgba(255,255,255,0.12)",
               }}>
-                <div style={{ fontSize: "var(--text-xl)", fontWeight: 700, color: "var(--purple)", textTransform: "uppercase", letterSpacing: "0.04em", flex: 1, fontFamily: "var(--font-heading)" }}>Total Annual Value</div>
-                <PopoverFigure value={totalRevenue} color="var(--blue)" fontSize="var(--text-2xl)" />
-                <PopoverFigure value={totalProfit} color="var(--peach)" fontSize="var(--text-2xl)" />
+                <div style={{ flex: 1 }} />
+                <PopoverFigure value={totalRevenue} color="#fff" fontSize="var(--text-2xl)" />
+                <PopoverFigure value={totalProfit} color="#fff" fontSize="var(--text-2xl)" />
               </div>
 
               {/* Line items */}
@@ -248,21 +266,21 @@ export default function LoxaROI() {
               />
               <LineItem
                 title="Conversion Uplift" revenue={conversionRevenue} profit={conversionProfit}
-                color="var(--purple)"
+                color="var(--peach)"
                 tags={<>
                   <Tag label="Conversion increase" value={`${conversionIncrease}%`} />
                 </>}
               />
               <LineItem
                 title="Reduced Returns" revenue={returnsRevenue} profit={returnsProfit}
-                color="var(--purple)"
+                color="var(--blue)"
                 tags={<>
                   <Tag label="Return decrease" value={`${returnDecrease}%`} />
                 </>}
               />
               <LineItem
                 title="Claims Replacements" revenue={claimsRevenue} profit={claimsProfit}
-                color="var(--purple)" isLast
+                color="var(--lime)" isLast
                 tags={<>
                   <Tag label="Replacement rate" value={`${replacementRate}%`} />
                   <Tag label="Est. claims" value={Math.round(numClaims).toLocaleString("en-GB")} />
@@ -280,7 +298,7 @@ export default function LoxaROI() {
               label="Total Insurable Revenue" value={revenue} onChange={setRevenue}
               min={500000} max={500000000} step={revenueStep}
               prefix={"\u00a3"} suffix=""
-              tooltip="Annual revenue from physical products eligible for protection"
+              tooltip="Annual revenue from eligible products"
             />
             <Slider
               label="Avg Insured Product Value" value={avgInsuredValue} onChange={setAvgInsuredValue}
@@ -296,51 +314,85 @@ export default function LoxaROI() {
               min={10} max={60} step={0.5} prefix="" suffix="%"
               tooltip="Your margin on replacement items fulfilled under claims"
             />
+
+            <ul style={{ fontSize: "var(--text-xs)", color: "#999", lineHeight: 1.7, paddingLeft: 16, fontWeight: 400, marginTop: 20, borderTop: "1px solid #e4e4e4", paddingTop: 16 }}>
+              <li>Figures are estimates — actual results will vary</li>
+              <li>Category benchmarks are based on Loxa data</li>
+              <li>All revenue streams calculated net of 20% VAT</li>
+              <li>Insurance profit is calculated net of 12% IPT</li>
+            </ul>
           </div>
         </div>
 
         {/* Explanation */}
-        <div style={{
-          marginTop: 32, padding: "28px 32px",
-          fontSize: "var(--text-base)", color: "#444", lineHeight: 1.7,
-          maxWidth: 800,
-        }}>
-          <div style={{ fontSize: "var(--text-lg)", fontWeight: 700, color: "#000", fontFamily: "var(--font-heading)", marginBottom: 12 }}>How it works</div>
-          <p style={{ marginBottom: 12 }}>
-            Loxa protection creates value across four streams. <strong>Insurance premiums</strong> generate direct revenue from protection sold at checkout, with your share calculated net of 12% IPT. Offering protection at the point of sale drives a <strong>conversion uplift</strong> — customers buy with more confidence, increasing overall sales. Insured products see <strong>fewer returns</strong>, as protected customers are less likely to send items back. When claims do occur, you fulfil <strong>replacement products</strong> and earn margin on each one.
+        <div style={{ marginTop: 48, padding: "40px 40px 32px", background: "#fff", borderRadius: 32 }}>
+          <div style={{
+            fontSize: "var(--text-3xl)", fontWeight: 400, color: "#000",
+            fontFamily: "'Gelica', Georgia, serif", fontStyle: "italic",
+            marginBottom: 32, lineHeight: 1.2,
+          }}>
+            How it works
+          </div>
+          <p style={{ fontSize: "var(--text-lg)", color: "#444", lineHeight: 1.6, marginBottom: 32 }}>
+            Adding Loxa protection to your checkout boosts revenue in <span style={{ fontFamily: "var(--font-heading)", fontWeight: 700, color: "#000", fontSize: "var(--text-xl)" }}>4</span> ways:
           </p>
-          <p style={{ fontSize: "var(--text-sm)", color: "#777" }}>
-            All product revenue streams are calculated net of 20% VAT. Benchmarks are based on Loxa category data. Figures are estimates — actual results will vary.
-          </p>
-        </div>
 
-        {/* CTA */}
-        <div style={{ textAlign: "center", marginTop: 40 }}>
-          <a
-            href="https://www.loxacover.com/contact"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: "inline-block",
-              background: "#000", color: "#fff",
-              border: "none", borderRadius: 999,
-              padding: "16px 48px", fontSize: "var(--text-lg)", fontWeight: 700,
-              fontFamily: "var(--font-heading)",
-              textDecoration: "none",
-              cursor: "pointer",
-              transition: "opacity 0.2s",
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.opacity = "0.85"}
-            onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}
-          >
-            Make an enquiry
-          </a>
+          <div className="stream-grid" style={{
+            display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 24,
+            marginBottom: 24,
+          }}>
+            {[
+              { title: "Insurance Premiums", desc: "Direct revenue from protection sold at checkout, with your share calculated net of IPT.", icon: "/icons/insurance_premiums.png", bg: "var(--purple)" },
+              { title: "Conversion Uplift", desc: "Customers buy with more confidence when protection is offered, increasing overall sales.", icon: "/icons/conversion_uplift.png", bg: "var(--peach)" },
+              { title: "Reduced\nReturns", desc: "Protected customers are less likely to return items, saving you cost and lost stock.", icon: "/icons/reduced_returns.png", bg: "var(--blue)" },
+              { title: "Claims Replacements", desc: "When claims occur, you fulfil replacement products and earn margin on each one.", icon: "/icons/claims_replacements.png", bg: "var(--lime)" },
+            ].map((item) => (
+              <div key={item.title} style={{
+                background: item.bg, borderRadius: 20, padding: "28px 24px",
+                display: "flex", flexDirection: "column", alignItems: "center", gap: 10,
+                textAlign: "center",
+              }}>
+                <img src={item.icon} alt={item.title} style={{ width: 120, height: 120, marginBottom: 4 }} />
+                <div style={{
+                  fontSize: "var(--text-base)", fontWeight: 700, color: "#000",
+                  fontFamily: "var(--font-heading)", textTransform: "uppercase", whiteSpace: "pre-line",
+                }}>
+                  {item.title}
+                </div>
+                <div style={{ fontSize: "var(--text-sm)", color: "rgba(0,0,0,0.6)", lineHeight: 1.5 }}>
+                  {item.desc}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <div style={{ textAlign: "center", marginTop: 32 }}>
+            <a
+              href="https://www.loxacover.com/contact"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-block",
+                background: "var(--purple)", color: "#000",
+                border: "none", borderRadius: 999,
+                padding: "16px 48px", fontSize: "var(--text-lg)", fontWeight: 700,
+                fontFamily: "var(--font-heading)",
+                textDecoration: "none",
+                cursor: "pointer",
+                transition: "opacity 0.2s",
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.opacity = "0.85"}
+              onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}
+            >
+              Make an enquiry
+            </a>
+          </div>
         </div>
 
         {/* Footer */}
         <div style={{ textAlign: "center", marginTop: 24, fontSize: "var(--text-xs)", color: "#888", lineHeight: 1.7 }}>
           Loxa is authorised and regulated by the Financial Conduct Authority (FCA).
-          <div style={{ marginTop: 6, fontWeight: 600, color: "#555", fontSize: "var(--text-sm)" }}>www.loxacover.com</div>
         </div>
       </div>
     </div>

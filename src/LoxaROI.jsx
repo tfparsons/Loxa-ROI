@@ -14,6 +14,7 @@ function getParams() {
     replacement_rate: Number(p.get("replacement")) || 1.5,
     conversion_increase: Number(p.get("conversion")) || 1.5,
     return_decrease: Number(p.get("returns")) || 5,
+    category: p.get("category") || "Category",
   };
 }
 
@@ -128,6 +129,7 @@ function LineItem({ title, revenue, profit, color, tags, isLast }) {
 export default function LoxaROI() {
   const defaults = getParams();
   const [company] = useState(defaults.company);
+  const category = defaults.category;
   const [revenue, setRevenue] = useState(defaults.revenue);
   const [avgInsuredValue, setAvgInsuredValue] = useState(defaults.avg_insured_value);
   const [productMargin, setProductMargin] = useState(defaults.product_margin);
@@ -240,8 +242,8 @@ export default function LoxaROI() {
               {/* Column headers + Total label */}
               <div style={{ display: "flex", alignItems: "flex-start", paddingBottom: 8 }}>
                 <div style={{ fontSize: "var(--text-xl)", fontWeight: 700, color: "var(--purple)", textTransform: "uppercase", letterSpacing: "0.04em", flex: 1, fontFamily: "var(--font-heading)" }}>Total Annual<br/>Value</div>
-                <div style={{ fontSize: "var(--text-sm)", color: "var(--blue)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", width: 100, flexShrink: 0, textAlign: "right", marginLeft: 12 }}>Revenue</div>
-                <div style={{ fontSize: "var(--text-sm)", color: "var(--peach)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", width: 100, flexShrink: 0, textAlign: "right", marginLeft: 12 }}>Profit</div>
+                <div style={{ fontSize: "var(--text-sm)", color: "#fff", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", width: 100, flexShrink: 0, textAlign: "right", marginLeft: 12 }}>Revenue</div>
+                <div style={{ fontSize: "var(--text-sm)", color: "#fff", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", width: 100, flexShrink: 0, textAlign: "right", marginLeft: 12 }}>Profit</div>
               </div>
 
               {/* Total figures */}
@@ -317,7 +319,7 @@ export default function LoxaROI() {
 
             <ul style={{ fontSize: "var(--text-xs)", color: "#999", lineHeight: 1.7, paddingLeft: 16, fontWeight: 400, marginTop: 20, borderTop: "1px solid #e4e4e4", paddingTop: 16 }}>
               <li>Figures are estimates — actual results will vary</li>
-              <li>Category benchmarks are based on Loxa data</li>
+              <li>{category} benchmarks are based on Loxa data</li>
               <li>All revenue streams calculated net of 20% VAT</li>
               <li>Insurance profit is calculated net of 12% IPT</li>
             </ul>
@@ -374,7 +376,7 @@ export default function LoxaROI() {
               rel="noopener noreferrer"
               style={{
                 display: "inline-block",
-                background: "var(--purple)", color: "#000",
+                background: "#000", color: "var(--lime)",
                 border: "none", borderRadius: 999,
                 padding: "16px 48px", fontSize: "var(--text-lg)", fontWeight: 700,
                 fontFamily: "var(--font-heading)",
